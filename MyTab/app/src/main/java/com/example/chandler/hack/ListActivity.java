@@ -1,4 +1,4 @@
-package com.example.chandler1234.exampleapp;
+package com.example.chandler.hack;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
