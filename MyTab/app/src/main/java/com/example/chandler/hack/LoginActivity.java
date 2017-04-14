@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -32,17 +33,7 @@ public class LoginActivity extends AppCompatActivity {
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Login.validateUser(ed1.getText().toString(), ed2.getText().toString())){
-                    Toast.makeText(getBaseContext(),
-                    "Redirecting...", Toast.LENGTH_SHORT).show();
-
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
-                }
-                else {
-                    Toast.makeText(getBaseContext(),
-                    "Incorrect Credentials", Toast.LENGTH_SHORT).show();
-                }
+                Login(v);
             }
         });
 
@@ -54,6 +45,20 @@ public class LoginActivity extends AppCompatActivity {
                 showSignUp();
             }
         });
+    }
+
+    public void Login(View v) {
+        if (Login.validateUser(ed1.getText().toString(), ed2.getText().toString())){
+            Toast.makeText(getBaseContext(),
+                    "Redirecting...", Toast.LENGTH_SHORT).show();
+
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+        }
+        else {
+            Toast.makeText(getBaseContext(),
+                    "Incorrect Credentials", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void showSignUp() {
