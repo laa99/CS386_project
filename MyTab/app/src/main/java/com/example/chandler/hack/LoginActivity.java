@@ -1,23 +1,22 @@
 package com.example.chandler.hack;
 
-import android.app.DialogFragment;
 import android.content.Intent;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.FileReader;
+import java.io.IOException;
+
 public class LoginActivity extends AppCompatActivity {
     Button b1, b2;
     EditText ed1, ed2;
-    Login Login = new Login();
+    User user;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -27,7 +26,7 @@ public class LoginActivity extends AppCompatActivity {
         b1 = (Button)findViewById(R.id.login);
         b2 = (Button)findViewById(R.id.signUp);
 
-        ed1 = (EditText)findViewById(R.id.emailText);
+        ed1 = (EditText)findViewById(R.id.usernameText);
         ed2 = (EditText)findViewById(R.id.passText);
 
         b1.setOnClickListener(new View.OnClickListener() {
@@ -48,64 +47,41 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void Login(View v) {
-        if (Login.validateUser(ed1.getText().toString(), ed2.getText().toString())){
+        try {
+            // Not using file is fine here
+            // It is currently used as the detector for the creation of an account
+            // If the file exists, the "account" has been registered and the user file
+            // is present
+            FileReader file = new FileReader(
+                    getFilesDir().getPath() + ed1.getText().toString() + ed2.getText().toString() +
+                            "DrinkList.json");
             Toast.makeText(getBaseContext(),
                     "Redirecting...", Toast.LENGTH_SHORT).show();
 
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
         }
-        else {
+        catch (IOException e) {
             Toast.makeText(getBaseContext(),
                     "Incorrect Credentials", Toast.LENGTH_SHORT).show();
+            Log.i("IOException", e.getMessage());
+        }
+        catch (NullPointerException e) {
+            Toast.makeText(getBaseContext(),
+                    "Incorrect Credentials", Toast.LENGTH_SHORT).show();
+            Log.i("NullPointerException", e.getMessage());
         }
     }
 
     public void showSignUp() {
         signUpDialog newFragment = signUpDialog.newInstance();
+        Bundle bundle = new Bundle();
+        bundle.putString("fileDir", getFilesDir().getPath());
+        newFragment.setArguments(bundle);
         newFragment.show(getFragmentManager(), "dialog");
     }
 
-    public static class signUpDialog extends DialogFragment {
-
-        EditText email, pass, passConfirm;
-        Button b1, b2;
-
-        static signUpDialog newInstance() {
-            return new signUpDialog();
-        }
-
-        @Nullable
-        @Override
-        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-            View v = inflater.inflate(R.layout.sign_up, container, false);
-            b1 = (Button)v.findViewById(R.id.Confirm);
-            b2 = (Button)v.findViewById(R.id.Cancel);
-
-            email = (EditText)v.findViewById(R.id.emailText);
-            pass = (EditText)v.findViewById(R.id.passText);
-            passConfirm = (EditText)v.findViewById(R.id.passTextConfirm);
-
-            b1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (pass.getText().toString().equals(passConfirm.getText().toString())) {
-                        // Figure out some way to create user accounts to temporarily store in the
-                        // system
-                    }
-                    else {
-                        dismiss();
-                    }
-                }
-            });
-
-            b2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dismiss();
-                }
-            });
-            return v;
-        }
+    public void setUser(User user) {
+        this.user = user;
     }
 }
