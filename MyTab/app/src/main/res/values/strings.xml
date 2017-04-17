@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">MyTab</string>
     <string name="title_activity_edit_wine">activity_edit_wine</string>
-    <string name="Email">Email</string>
+    <string name="Username">Username</string>
     <string name="Password">Password</string>
     <string name="PasswordConfirm">Confirm Password</string>
     <string name="Login">Login</string>

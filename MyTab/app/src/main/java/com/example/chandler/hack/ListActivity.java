@@ -20,7 +20,6 @@ public class ListActivity extends AppCompatActivity {
     private ListView lvItems;
 
 
-
     //automatically created when a project is made & it creates this file
     @Override
     protected void onCreate(Bundle savedInstanceState) {
